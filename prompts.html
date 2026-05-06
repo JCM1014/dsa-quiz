@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompts — DSA in Java Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #c0392b;
+      --red-light: #fdecea;
+      --red-dark: #a93226;
+      --white: #ffffff;
+      --gray-50: #f8f7f5;
+      --gray-100: #f0efed;
+      --gray-200: #e0dfdc;
+      --gray-400: #9a9894;
+      --gray-700: #3d3c3a;
+      --gray-900: #1a1918;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-dot {
+      width: 28px; height: 28px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .nav-dot svg { width: 14px; height: 14px; fill: #fff; }
+
+    .nav-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-subtitle {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-left: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-400);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover { color: var(--gray-900); }
+
+    .nav-link.active {
+      color: var(--red);
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--gray-200);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 span { color: var(--red); }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--gray-400);
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      margin-bottom: 1.25rem;
+    }
+
+    /* TIMELINE */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 0;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.05s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.10s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.15s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.20s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.25s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.30s; }
+    .timeline-item:nth-child(7) { animation-delay: 0.35s; }
+    .timeline-item:nth-child(8) { animation-delay: 0.40s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* LEFT COLUMN — number + line */
+    .timeline-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--red-light);
+      color: var(--red);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 0.5px solid rgba(192, 57, 43, 0.2);
+    }
+
+    .timeline-line {
+      width: 1px;
+      flex: 1;
+      background: var(--gray-200);
+      margin: 6px 0;
+      min-height: 24px;
+    }
+
+    .timeline-item:last-child .timeline-line {
+      display: none;
+    }
+
+    /* RIGHT COLUMN — card */
+    .timeline-right {
+      flex: 1;
+      padding-bottom: 1.25rem;
+      padding-left: 1rem;
+    }
+
+    .prompt-card {
+      background: var(--white);
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .prompt-card:hover {
+      border-color: rgba(192, 57, 43, 0.3);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .card-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 99px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tag-setup    { background: #eaf3fb; color: #1a5f8a; }
+    .tag-content  { background: #eafaf1; color: #1a6b3c; }
+    .tag-feature  { background: #fdf6e3; color: #7d5a00; }
+    .tag-design   { background: #fdecea; color: var(--red); }
+    .tag-deploy   { background: #f0ecfb; color: #5b3e9e; }
+    .tag-meta     { background: var(--gray-100); color: var(--gray-700); }
+
+    .prompt-quote {
+      font-family: 'DM Mono', monospace;
+      font-size: 12.5px;
+      color: var(--gray-700);
+      background: var(--gray-50);
+      border-left: 2.5px solid var(--red);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 0.6rem 0.875rem;
+      margin-bottom: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .prompt-summary {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray-700);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 12px;
+      color: var(--gray-400);
+      border-top: 0.5px solid var(--gray-200);
+      background: var(--white);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="index.html">
+      <div class="nav-dot">
+        <svg viewBox="0 0 16 16"><path d="M8 1L10.5 6H14L11 9.5L12.5 14L8 11.5L3.5 14L5 9.5L2 6H5.5Z"/></svg>
+      </div>
+      <span class="nav-title">DSA Practice Quiz</span>
+      <span class="nav-subtitle">— Java</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Quiz</a>
+      <a class="nav-link active" href="prompts.html">Prompts</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Behind the build</div>
+    <h1>The <span>prompts</span> that built this</h1>
+    <p>A log of every instruction used to create this quiz — from the initial idea to deployment.</p>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="section-label">8 prompts · conversation log</div>
+
+    <div class="timeline">
+
+      <!-- 1 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">1</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Initial Quiz Request</span>
+              <span class="card-tag tag-setup">Setup</span>
+            </div>
+            <div class="prompt-quote">
+              "I want to create a website that acts as a quiz for a specific topic... it will be about the basics of data structures and algorithms (this is for my class), it will contain a mix of multiple choice and true/false."
+            </div>
+            <p class="prompt-summary">
+              Kicked off the project by requesting a quiz website on basic data structures and algorithms for a CS class. Established the core format: a mix of multiple choice and true/false questions at an easy difficulty level suitable for students already in a computer science program.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">2</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Subtopics & Question Count</span>
+              <span class="card-tag tag-content">Content</span>
+            </div>
+            <div class="prompt-quote">
+              "I would like between 1–2 questions for each subtopic, they are: Sorting methods (merge, heap, quick, and counting), Stack and Queue, Linked Lists, Binary Search Trees, Dynamic Programming, Graphing (BFS and DFS, Minimum Spanning Tree, Single Source Shortest, and All Pair Shortest Path)."
+            </div>
+            <p class="prompt-summary">
+              Defined the full list of subtopics to be covered and set an initial question count of 1–2 per subtopic. The graphing section was broken into four specific algorithms: BFS/DFS, Minimum Spanning Tree, Single Source Shortest Path, and All Pairs Shortest Path.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">3</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Timer, Navigation & Results</span>
+              <span class="card-tag tag-feature">Feature</span>
+            </div>
+            <div class="prompt-quote">
+              "One at a time with a 'next button', however it should have a 60 second timer seen in each question, and it should show the score and results with correct answer explanations. Oh and I forgot to mention that it is all about Java coding."
+            </div>
+            <p class="prompt-summary">
+              Added key interactive features: a 60-second countdown timer per question, one-question-at-a-time navigation with a Next button, and a final results screen showing the score alongside correct answer explanations. Also clarified that all questions should be Java-specific.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">4</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Design & Color Scheme</span>
+              <span class="card-tag tag-design">Design</span>
+            </div>
+            <div class="prompt-quote">
+              "Let's make it 1–4 questions each depending on how much is needed to cover each subtopic. For now, let's keep it clean (making it look like a practical quiz, but not too serious), and the color scheme can just be red and white."
+            </div>
+            <p class="prompt-summary">
+              Revised the question count to 1–4 per subtopic based on coverage needs, bringing the total to 20 questions. Set the visual direction to clean and practical with a red and white color palette — professional enough for study use but not overly formal.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">5</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Launch the Website</span>
+              <span class="card-tag tag-feature">Feature</span>
+            </div>
+            <div class="prompt-quote">
+              "First, can you bring up the website?"
+            </div>
+            <p class="prompt-summary">
+              Requested the quiz to be packaged as a proper standalone HTML file available for download, rather than just an inline preview. The file was generated with a full nav bar, hero section with quiz stats, all 20 questions, timer, feedback, and results screen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">6</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Public Deployment Request</span>
+              <span class="card-tag tag-deploy">Deploy</span>
+            </div>
+            <div class="prompt-quote">
+              "Great! Now, can you make this website publicly available, I also have a GitHub account for deployment if needed."
+            </div>
+            <p class="prompt-summary">
+              Asked to make the quiz publicly accessible online. GitHub Pages was recommended as the ideal deployment option given an existing GitHub account. Step-by-step instructions were provided for creating a repo, uploading the file, and enabling Pages hosting.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">7</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">GitHub Prep</span>
+              <span class="card-tag tag-deploy">Deploy</span>
+            </div>
+            <div class="prompt-quote">
+              "Yes please, let's get it ready for GitHub."
+            </div>
+            <p class="prompt-summary">
+              Confirmed to proceed with GitHub Pages deployment. The quiz file was renamed from <code style="font-family:'DM Mono',monospace;font-size:12px;background:var(--gray-100);padding:1px 5px;border-radius:4px;">dsa-quiz.html</code> to <code style="font-family:'DM Mono',monospace;font-size:12px;background:var(--gray-100);padding:1px 5px;border-radius:4px;">index.html</code> so GitHub Pages serves it as the homepage, and detailed upload steps were provided.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="step-num">8</div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-right">
+          <div class="prompt-card">
+            <div class="card-top">
+              <span class="card-title">Prompts Page</span>
+              <span class="card-tag tag-meta">Meta</span>
+            </div>
+            <div class="prompt-quote">
+              "Now for the prompts page, it should just include the prompt (my entries to you) and then give a short summary for each one so far."
+            </div>
+            <p class="prompt-summary">
+              Requested a dedicated page documenting all prompts used throughout the conversation. Each entry displays the original prompt text alongside a short description of what it accomplished — creating a transparent log of how the quiz was built from start to finish.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>DSA in Java — Practice Quiz &nbsp;·&nbsp; For CS students &nbsp;·&nbsp; Built for review purposes</footer>
+
+</body>
+</html>
