@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DSA in Java — Practice Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #c0392b;
+      --red-light: #fdecea;
+      --red-dark: #a93226;
+      --green: #27ae60;
+      --green-light: #eafaf1;
+      --white: #ffffff;
+      --gray-50: #f8f7f5;
+      --gray-100: #f0efed;
+      --gray-200: #e0dfdc;
+      --gray-400: #9a9894;
+      --gray-700: #3d3c3a;
+      --gray-900: #1a1918;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-dot {
+      width: 28px; height: 28px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .nav-dot svg { width: 14px; height: 14px; fill: #fff; }
+
+    .nav-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-subtitle {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-left: 4px;
+    }
+
+    .nav-badge {
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--red-light);
+      color: var(--red);
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--gray-200);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 span { color: var(--red); }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--gray-400);
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--gray-900);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 3px;
+    }
+
+    .stat-divider {
+      width: 0.5px;
+      background: var(--gray-200);
+      height: 36px;
+      align-self: center;
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      flex: 1;
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* PROGRESS BAR */
+    .progress-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 5px;
+      background: var(--gray-200);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: var(--gray-400);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* QUESTION CARD */
+    .question-card {
+      background: var(--white);
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: 2rem 2.25rem;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.25s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TIMER + TAG ROW */
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .subtopic-pill {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 4px 12px;
+      border-radius: 99px;
+      max-width: 55%;
+    }
+
+    /* CIRCULAR TIMER */
+    .timer-wrap {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+    }
+
+    .timer-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .timer-bg-ring {
+      fill: none;
+      stroke: var(--gray-200);
+      stroke-width: 3.5;
+    }
+
+    .timer-fg-ring {
+      fill: none;
+      stroke: var(--red);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s;
+    }
+
+    .timer-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-700);
+    }
+
+    /* QUESTION TEXT */
+    .question-text {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.6;
+      color: var(--gray-900);
+      margin-bottom: 1.5rem;
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      font-family: 'DM Mono', monospace;
+      font-size: 13.5px;
+      background: var(--gray-50);
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.7;
+      color: var(--gray-700);
+      display: none;
+    }
+
+    /* OPTIONS */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0.875rem 1.125rem;
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--gray-900);
+      text-align: left;
+      transition: background 0.13s, border-color 0.13s, transform 0.1s;
+    }
+
+    .option:hover:not(:disabled) {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
+    }
+
+    .option:active:not(:disabled) { transform: scale(0.99); }
+
+    .option:disabled { cursor: default; }
+
+    .option.correct {
+      border-color: var(--green);
+      background: var(--green-light);
+      color: #1a6b3c;
+    }
+
+    .option.wrong {
+      border-color: var(--red);
+      background: var(--red-light);
+      color: #7b1f17;
+    }
+
+    .letter-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 0.5px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: background 0.13s, border-color 0.13s, color 0.13s;
+      color: var(--gray-700);
+    }
+
+    .option.correct .letter-badge {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .option.wrong .letter-badge {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* EXPLANATION */
+    .explanation {
+      margin-top: 1.25rem;
+      padding: 1rem 1.125rem;
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--gray-200);
+      background: var(--gray-50);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray-700);
+      display: none;
+    }
+
+    .explanation.show { display: block; }
+    .explanation strong { color: var(--gray-900); }
+
+    /* NEXT BUTTON */
+    .next-btn {
+      width: 100%;
+      margin-top: 1.25rem;
+      padding: 0.9rem 1rem;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: none;
+    }
+
+    .next-btn:hover { background: var(--red-dark); }
+    .next-btn:active { transform: scale(0.99); }
+    .next-btn.show { display: block; }
+
+    /* RESULTS */
+    .results {
+      display: none;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .results.show { display: block; }
+
+    .results-hero {
+      background: var(--white);
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .score-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 4px solid var(--red);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .score-num {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .score-total {
+      font-size: 13px;
+      color: var(--gray-400);
+    }
+
+    .results-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+
+    .results-pct {
+      font-size: 14px;
+      color: var(--gray-400);
+    }
+
+    .results-breakdown {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 1.5rem;
+    }
+
+    .breakdown-cell {
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+    }
+
+    .breakdown-val {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .breakdown-key {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+
+    .result-row {
+      background: var(--white);
+      border: 0.5px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .result-row.pass { border-color: var(--green); background: var(--green-light); }
+    .result-row.fail { border-color: var(--red); background: var(--red-light); }
+
+    .result-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+
+    .result-meta { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray-400); margin-bottom: 3px; }
+    .result-q { font-weight: 500; color: var(--gray-900); margin-bottom: 4px; }
+    .result-ans { font-size: 13px; color: var(--gray-400); }
+    .result-ans b { color: var(--gray-700); font-weight: 500; }
+    .result-expl { font-size: 13px; color: var(--gray-700); margin-top: 5px; border-top: 0.5px solid rgba(0,0,0,0.08); padding-top: 5px; }
+
+    .restart-btn {
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .restart-btn:hover { background: var(--red-dark); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 12px;
+      color: var(--gray-400);
+      border-top: 0.5px solid var(--gray-200);
+      background: var(--white);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="nav-dot">
+        <svg viewBox="0 0 16 16"><path d="M8 1L10.5 6H14L11 9.5L12.5 14L8 11.5L3.5 14L5 9.5L2 6H5.5Z"/></svg>
+      </div>
+      <span class="nav-title">DSA Practice Quiz</span>
+      <span class="nav-subtitle">— Java</span>
+    </div>
+    <span class="nav-badge">CS Students</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="hero-section">
+    <div class="hero-tag">Data Structures &amp; Algorithms</div>
+    <h1>Test your <span>Java DSA</span> knowledge</h1>
+    <p>A timed practice quiz covering core concepts you're expected to know in your CS course.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">20</span>
+        <span class="stat-label">Questions</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">60s</span>
+        <span class="stat-label">Per question</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">7</span>
+        <span class="stat-label">Topics</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">Java</span>
+        <span class="stat-label">Language</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- QUIZ VIEW -->
+    <div id="quiz-view">
+      <div class="progress-section">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <span class="progress-label" id="progress-label">1 / 20</span>
+      </div>
+
+      <div class="question-card" id="question-card">
+        <div class="meta-row">
+          <span class="subtopic-pill" id="subtopic-pill">Sorting</span>
+          <div class="timer-wrap">
+            <svg width="52" height="52" viewBox="0 0 52 52">
+              <circle class="timer-bg-ring" cx="26" cy="26" r="21"/>
+              <circle class="timer-fg-ring" id="timer-ring" cx="26" cy="26" r="21"
+                stroke-dasharray="131.9" stroke-dashoffset="0"/>
+            </svg>
+            <div class="timer-text" id="timer-text">60</div>
+          </div>
+        </div>
+
+        <p class="question-text" id="question-text"></p>
+        <pre class="code-block" id="code-block"></pre>
+
+        <div class="options" id="options"></div>
+        <div class="explanation" id="explanation"></div>
+        <button class="next-btn" id="next-btn">Next question →</button>
+      </div>
+    </div>
+
+    <!-- RESULTS VIEW -->
+    <div class="results" id="results-view">
+      <div class="results-hero">
+        <div class="score-ring">
+          <span class="score-num" id="score-num">0</span>
+          <span class="score-total" id="score-total">/ 20</span>
+        </div>
+        <div class="results-title" id="results-title">Good effort!</div>
+        <div class="results-pct" id="results-pct">0% correct</div>
+        <div class="results-breakdown">
+          <div class="breakdown-cell">
+            <div class="breakdown-val" id="bd-correct">0</div>
+            <div class="breakdown-key">Correct</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-val" id="bd-wrong">0</div>
+            <div class="breakdown-key">Wrong</div>
+          </div>
+          <div class="breakdown-cell">
+            <div class="breakdown-val" id="bd-expired">0</div>
+            <div class="breakdown-key">Timed out</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-list" id="results-list"></div>
+      <button class="restart-btn" onclick="restart()">↺ Restart quiz</button>
+    </div>
+
+  </main>
+
+  <footer>DSA in Java — Practice Quiz &nbsp;·&nbsp; For CS students &nbsp;·&nbsp; Built for review purposes</footer>
+
+  <script>
+    const CIRCUMFERENCE = 2 * Math.PI * 21;
+
+    const QUESTIONS = [
+      {
+        subtopic: "Sorting — Merge Sort",
+        question: "What is the time complexity of Merge Sort in the worst case?",
+        options: ["O(n²)", "O(n log n)", "O(log n)", "O(n)"],
+        answer: 1,
+        explanation: "Merge Sort always divides the array in half (log n levels) and merges at each level (n work), giving O(n log n) in all cases — best, average, and worst."
+      },
+      {
+        subtopic: "Sorting — Merge Sort",
+        question: "In Java, which statement best describes how Merge Sort works?",
+        options: [
+          "It selects a pivot and partitions the array around it",
+          "It builds a max-heap and repeatedly extracts the maximum",
+          "It recursively splits the array and merges sorted halves",
+          "It counts element frequencies and places them in order"
+        ],
+        answer: 2,
+        explanation: "Merge Sort uses divide-and-conquer: split the array into two halves, recursively sort each half, then merge the two sorted halves back together."
+      },
+      {
+        subtopic: "Sorting — Heap Sort",
+        question: "True or False: Heap Sort uses a binary heap to sort elements in-place.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "True. Heap Sort builds a max-heap from the array, then repeatedly extracts the max and places it at the end. It operates in-place and runs in O(n log n)."
+      },
+      {
+        subtopic: "Sorting — Quick Sort",
+        question: "What is the worst-case time complexity of Quick Sort?",
+        options: ["O(n log n)", "O(n²)", "O(n)", "O(log n)"],
+        answer: 1,
+        explanation: "Quick Sort's worst case is O(n²), which occurs when the pivot is always the smallest or largest element (e.g., already sorted input with a naive pivot). Average case is O(n log n)."
+      },
+      {
+        subtopic: "Sorting — Quick Sort",
+        question: "True or False: Quick Sort is a stable sorting algorithm.",
+        options: ["True", "False"],
+        answer: 1,
+        explanation: "False. Quick Sort is not stable — elements with equal keys may be reordered during partitioning. Merge Sort is a well-known stable sort."
+      },
+      {
+        subtopic: "Sorting — Counting Sort",
+        question: "Counting Sort is most efficient when:",
+        options: [
+          "Elements are floating-point numbers in a wide range",
+          "The range of input values (k) is small relative to n",
+          "The array is already nearly sorted",
+          "Elements are large strings"
+        ],
+        answer: 1,
+        explanation: "Counting Sort runs in O(n + k) where k is the value range. It works best when k is small (e.g., sorting exam scores 0–100). It does not handle floats or negatives without modification."
+      },
+      {
+        subtopic: "Stack & Queue",
+        question: "In Java, which interface is recommended to implement a Stack?",
+        options: ["Queue", "Deque", "List", "Set"],
+        answer: 1,
+        explanation: "Java's Deque interface (e.g., ArrayDeque) is the recommended approach. The legacy Stack class exists but is considered outdated. Deque supports push/pop from one end efficiently."
+      },
+      {
+        subtopic: "Stack & Queue",
+        question: "True or False: A Queue follows LIFO (Last In, First Out) order.",
+        options: ["True", "False"],
+        answer: 1,
+        explanation: "False. A Queue follows FIFO (First In, First Out). The first element added is the first removed. LIFO describes a Stack."
+      },
+      {
+        subtopic: "Stack & Queue",
+        question: "What does the following Java code print?",
+        code: "Deque<Integer> stack = new ArrayDeque<>();\nstack.push(1);\nstack.push(2);\nstack.push(3);\nSystem.out.println(stack.pop());",
+        options: ["1", "2", "3", "Compilation error"],
+        answer: 2,
+        explanation: "push() adds to the top. After pushing 1, 2, 3, the top is 3. pop() removes and returns the top, so the output is 3 — LIFO behavior."
+      },
+      {
+        subtopic: "Linked Lists",
+        question: "True or False: In a singly linked list, you can traverse nodes in both directions.",
+        options: ["True", "False"],
+        answer: 1,
+        explanation: "False. A singly linked list only has a 'next' pointer — forward traversal only. A doubly linked list has both 'next' and 'prev', enabling bidirectional traversal."
+      },
+      {
+        subtopic: "Linked Lists",
+        question: "What is the time complexity of inserting a node at the head of a singly linked list?",
+        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+        answer: 2,
+        explanation: "Inserting at the head is O(1) — create a new node, point it to the current head, and update the head reference. No traversal required."
+      },
+      {
+        subtopic: "Linked Lists",
+        question: "Which is a disadvantage of linked lists compared to arrays in Java?",
+        options: [
+          "Linked lists cannot store duplicate values",
+          "Random access (getting element at index i) is O(n) instead of O(1)",
+          "Linked lists cannot grow dynamically",
+          "Linked lists require elements to be sorted"
+        ],
+        answer: 1,
+        explanation: "Arrays support O(1) random access. Linked lists require traversal from the head, making random access O(n). This is a key trade-off between the two structures."
+      },
+      {
+        subtopic: "Binary Search Trees",
+        question: "In a Binary Search Tree, which property must always hold?",
+        options: [
+          "Left child > parent, right child < parent",
+          "Left child < parent, right child > parent",
+          "All nodes must have exactly two children",
+          "The tree must be perfectly balanced"
+        ],
+        answer: 1,
+        explanation: "BST property: for any node, all values in its left subtree are less, and all in its right subtree are greater. This enables O(log n) average-case search."
+      },
+      {
+        subtopic: "Binary Search Trees",
+        question: "True or False: An in-order traversal of a BST visits nodes in ascending sorted order.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "True. In-order traversal (Left → Root → Right) visits all left children before the root, then right children. Combined with the BST property, this produces ascending order."
+      },
+      {
+        subtopic: "Dynamic Programming",
+        question: "What is the key idea behind Dynamic Programming?",
+        options: [
+          "Dividing the problem into equal halves recursively",
+          "Trying all possible solutions and picking the best one",
+          "Storing solutions to overlapping subproblems to avoid redundant work",
+          "Sorting the input before processing"
+        ],
+        answer: 2,
+        explanation: "DP solves problems by breaking them into overlapping subproblems, solving each once, and storing results (memoization or tabulation), reducing exponential recursion to polynomial time."
+      },
+      {
+        subtopic: "Dynamic Programming",
+        question: "True or False: Computing Fibonacci numbers with DP is more efficient than naive recursion.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "True. Naive recursion recomputes subproblems repeatedly giving O(2^n). DP computes each value once, reducing time complexity to O(n)."
+      },
+      {
+        subtopic: "Graphing — BFS & DFS",
+        question: "Which traversal algorithm uses a Queue as its primary data structure?",
+        options: [
+          "Depth-First Search (DFS)",
+          "Breadth-First Search (BFS)",
+          "Both BFS and DFS",
+          "Neither"
+        ],
+        answer: 1,
+        explanation: "BFS uses a Queue (FIFO) to explore neighbors level by level. DFS uses a Stack (or recursion) to go as deep as possible before backtracking."
+      },
+      {
+        subtopic: "Graphing — Minimum Spanning Tree",
+        question: "True or False: Kruskal's algorithm builds a Minimum Spanning Tree by selecting the smallest edge that doesn't form a cycle.",
+        options: ["True", "False"],
+        answer: 0,
+        explanation: "True. Kruskal's sorts all edges by weight and greedily adds the smallest edge that doesn't create a cycle (checked via Union-Find), until n-1 edges are chosen."
+      },
+      {
+        subtopic: "Graphing — Single Source Shortest Path",
+        question: "What data structure makes Dijkstra's algorithm most efficient?",
+        options: ["Stack", "Simple queue", "Priority queue (min-heap)", "Binary Search Tree"],
+        answer: 2,
+        explanation: "A priority queue (min-heap) lets Dijkstra's always process the unvisited node with the smallest known distance in O(log n), giving overall O((V + E) log V) complexity."
+      },
+      {
+        subtopic: "Graphing — All Pairs Shortest Path",
+        question: "What is the time complexity of the Floyd-Warshall algorithm?",
+        options: ["O(V²)", "O(V³)", "O(E log V)", "O(V + E)"],
+        answer: 1,
+        explanation: "Floyd-Warshall uses three nested loops over all vertices, yielding O(V³). It handles negative weights (but not negative cycles) and is implemented with a 2D distance matrix."
+      }
+    ];
+
+    let current = 0, score = 0, timer = null, timeLeft = 60, answered = false;
+    let log = [];
+
+    function render() {
+      answered = false;
+      const q = QUESTIONS[current];
+      const total = QUESTIONS.length;
+
+      document.getElementById('progress-fill').style.width = `${(current / total) * 100}%`;
+      document.getElementById('progress-label').textContent = `${current + 1} / ${total}`;
+      document.getElementById('subtopic-pill').textContent = q.subtopic;
+      document.getElementById('question-text').textContent = q.question;
+
+      const codeEl = document.getElementById('code-block');
+      if (q.code) { codeEl.textContent = q.code; codeEl.style.display = 'block'; }
+      else { codeEl.style.display = 'none'; }
+
+      const optEl = document.getElementById('options');
+      optEl.innerHTML = '';
+      const letters = ['A','B','C','D'];
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.innerHTML = `<span class="letter-badge">${letters[i]}</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => pick(i));
+        optEl.appendChild(btn);
+      });
+
+      document.getElementById('explanation').className = 'explanation';
+      document.getElementById('next-btn').className = 'next-btn';
+
+      // re-animate card
+      const card = document.getElementById('question-card');
+      card.style.animation = 'none';
+      card.offsetHeight;
+      card.style.animation = '';
+
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 60;
+      updateTimer();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) { clearInterval(timer); if (!answered) expire(); }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      document.getElementById('timer-text').textContent = timeLeft;
+      const offset = CIRCUMFERENCE * (1 - timeLeft / 60);
+      const ring = document.getElementById('timer-ring');
+      ring.style.strokeDashoffset = offset;
+      ring.style.stroke = timeLeft <= 10 ? '#e74c3c' : '#c0392b';
+    }
+
+    function pick(i) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+      const q = QUESTIONS[current];
+      const btns = document.querySelectorAll('.option');
+      btns.forEach(b => b.disabled = true);
+      btns[i].classList.add(i === q.answer ? 'correct' : 'wrong');
+      if (i !== q.answer) btns[q.answer].classList.add('correct');
+      const isCorrect = i === q.answer;
+      if (isCorrect) score++;
+      log.push({ qi: current, chosen: i, correct: isCorrect, expired: false });
+      showExplanation(isCorrect ? '✓ Correct!' : '✗ Incorrect.', q.explanation);
+    }
+
+    function expire() {
+      answered = true;
+      const q = QUESTIONS[current];
+      const btns = document.querySelectorAll('.option');
+      btns.forEach(b => b.disabled = true);
+      btns[q.answer].classList.add('correct');
+      log.push({ qi: current, chosen: -1, correct: false, expired: true });
+      showExplanation(`⏱ Time's up! Correct answer: ${q.options[q.answer]}.`, q.explanation);
+    }
+
+    function showExplanation(prefix, text) {
+      const el = document.getElementById('explanation');
+      el.innerHTML = `<strong>${prefix}</strong> ${text}`;
+      el.className = 'explanation show';
+      const nb = document.getElementById('next-btn');
+      nb.textContent = current < QUESTIONS.length - 1 ? 'Next question →' : 'See results →';
+      nb.className = 'next-btn show';
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      current++;
+      if (current < QUESTIONS.length) render();
+      else showResults();
+    });
+
+    function showResults() {
+      document.getElementById('quiz-view').style.display = 'none';
+      document.getElementById('hero-section').style.display = 'none';
+
+      const total = QUESTIONS.length;
+      const pct = Math.round((score / total) * 100);
+      const expired = log.filter(l => l.expired).length;
+      const wrong = total - score - expired;
+
+      document.getElementById('score-num').textContent = score;
+      document.getElementById('score-total').textContent = `/ ${total}`;
+      document.getElementById('results-pct').textContent = `${pct}% correct`;
+      document.getElementById('bd-correct').textContent = score;
+      document.getElementById('bd-wrong').textContent = wrong;
+      document.getElementById('bd-expired').textContent = expired;
+
+      let title = 'Keep practicing!';
+      if (pct >= 90) title = 'Outstanding work!';
+      else if (pct >= 75) title = 'Great job!';
+      else if (pct >= 60) title = 'Good effort!';
+      document.getElementById('results-title').textContent = title;
+
+      const list = document.getElementById('results-list');
+      list.innerHTML = '';
+      log.forEach(entry => {
+        const q = QUESTIONS[entry.qi];
+        const div = document.createElement('div');
+        div.className = `result-row ${entry.correct ? 'pass' : 'fail'}`;
+        const chosenText = entry.chosen === -1 ? 'No answer (timed out)' : q.options[entry.chosen];
+        const correctText = q.options[q.answer];
+        div.innerHTML = `
+          <span class="result-icon">${entry.correct ? '✓' : '✗'}</span>
+          <div style="min-width:0">
+            <div class="result-meta">${q.subtopic}</div>
+            <div class="result-q">${q.question.length > 90 ? q.question.slice(0,90)+'…' : q.question}</div>
+            <div class="result-ans">Your answer: <b>${chosenText}</b>${!entry.correct ? ` &nbsp;·&nbsp; Correct: <b>${correctText}</b>` : ''}</div>
+            <div class="result-expl">${q.explanation}</div>
+          </div>`;
+        list.appendChild(div);
+      });
+
+      document.getElementById('results-view').className = 'results show';
+    }
+
+    function restart() {
+      current = 0; score = 0; answered = false; log = [];
+      document.getElementById('results-view').className = 'results';
+      document.getElementById('quiz-view').style.display = 'block';
+      document.getElementById('hero-section').style.display = 'block';
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
